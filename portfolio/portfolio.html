@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shaikh Ahmed Fayaz — AI Researcher & Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #080c14;
+    --surface: #0d1422;
+    --surface2: #111827;
+    --border: rgba(99,210,210,0.12);
+    --cyan: #63d2d2;
+    --cyan-dim: rgba(99,210,210,0.15);
+    --cyan-glow: rgba(99,210,210,0.35);
+    --amber: #f5c842;
+    --text: #e8edf5;
+    --text-dim: #7a8aab;
+    --text-muted: #3d4d6a;
+    --serif: 'DM Serif Display', serif;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Instrument Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: .45;
+  }
+
+  /* ── GRID BG ── */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(99,210,210,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,210,210,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(8,12,20,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--cyan);
+    letter-spacing: .12em;
+    text-decoration: none;
+  }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color .25s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 80px 80px;
+    gap: 60px;
+  }
+
+  .hero-orb {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,210,210,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+
+  .hero-text { position: relative; }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 28px; height: 1px;
+    background: var(--cyan);
+  }
+
+  h1.hero-name {
+    font-family: var(--serif);
+    font-size: clamp(42px, 5.5vw, 68px);
+    line-height: 1.08;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  h1.hero-name em {
+    color: var(--cyan);
+    font-style: italic;
+  }
+
+  .hero-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--amber);
+    letter-spacing: .08em;
+    margin-bottom: 28px;
+    margin-top: 10px;
+  }
+
+  .hero-desc {
+    font-size: 15px;
+    color: var(--text-dim);
+    max-width: 480px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+
+  .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 28px;
+    background: var(--cyan);
+    color: #080c14;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all .25s;
+  }
+  .btn-primary:hover { background: #7ee3e3; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99,210,210,0.3); }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 28px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all .25s;
+  }
+  .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  /* Hero stats */
+  .hero-visual { position: relative; display: flex; flex-direction: column; gap: 16px; }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 24px;
+    display: flex; align-items: center; gap: 20px;
+    animation: slideIn .6s ease both;
+  }
+  .stat-card:nth-child(1) { animation-delay: .1s; }
+  .stat-card:nth-child(2) { animation-delay: .2s; }
+  .stat-card:nth-child(3) { animation-delay: .3s; margin-left: 32px; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(30px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 40px;
+    color: var(--cyan);
+    line-height: 1;
+    min-width: 70px;
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); line-height: 1.4; }
+  .stat-label strong { display: block; color: var(--text); font-size: 14px; margin-bottom: 2px; }
+
+  /* ── SECTION COMMONS ── */
+  section { position: relative; z-index: 1; padding: 100px 80px; }
+
+  .section-tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-tag::before {
+    content: '';
+    display: inline-block; width: 20px; height: 1px;
+    background: var(--cyan);
+  }
+
+  h2.section-title {
+    font-family: var(--serif);
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 56px;
+  }
+
+  /* ── ABOUT / SKILLS ── */
+  #skills { background: var(--surface2); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .skill-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    transition: border-color .25s, transform .25s;
+  }
+  .skill-group:hover { border-color: var(--cyan-glow); transform: translateY(-4px); }
+
+  .skill-group-icon {
+    font-size: 22px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .skill-group-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 14px;
+  }
+
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .skill-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--cyan-dim);
+    border: 1px solid rgba(99,210,210,0.2);
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ── PUBLICATIONS ── */
+  #publications .pub-list { display: flex; flex-direction: column; gap: 24px; }
+
+  .pub-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--cyan);
+    border-radius: 0 4px 4px 0;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: start;
+    transition: border-color .25s, background .25s;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .5s ease, transform .5s ease, border-color .25s, background .25s;
+  }
+  .pub-card.visible { opacity: 1; transform: translateY(0); }
+  .pub-card:hover { background: #131c2e; border-color: var(--cyan); }
+
+  .pub-venue {
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(245,200,66,0.12);
+    border: 1px solid rgba(245,200,66,0.25);
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 10px;
+  }
+  .pub-venue.review {
+    background: rgba(99,210,210,0.1);
+    border-color: rgba(99,210,210,0.2);
+    color: var(--cyan);
+  }
+
+  .pub-title {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .pub-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    max-width: 680px;
+  }
+
+  .pub-acc {
+    text-align: right;
+    white-space: nowrap;
+  }
+  .pub-acc .acc-num {
+    font-family: var(--serif);
+    font-size: 28px;
+    color: var(--cyan);
+    display: block;
+    line-height: 1;
+  }
+  .pub-acc .acc-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  /* ── PROJECTS ── */
+  #projects { background: var(--surface2); }
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px;
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+  }
+  .project-card:hover { transform: translateY(-6px); border-color: var(--cyan-glow); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+
+  .project-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    letter-spacing: .1em;
+  }
+
+  .project-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.25;
+  }
+
+  .project-desc { font-size: 13.5px; color: var(--text-dim); margin-bottom: 20px; line-height: 1.7; }
+
+  .project-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .project-tag {
+    padding: 3px 9px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--text-muted);
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    text-align: center;
+  }
+
+  .contact-wrap {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .contact-desc { color: var(--text-dim); margin-bottom: 40px; font-size: 15px; }
+
+  .contact-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-bottom: 50px; }
+
+  .contact-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 22px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 12px;
+    transition: all .25s;
+  }
+  .contact-item:hover { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-dim); }
+  .contact-item svg { flex-shrink: 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 32px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: .08em;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, var(--cyan), transparent);
+    margin-bottom: 48px;
+  }
+
+  /* ── SCROLL ANIMATION ── */
+  .fade-up {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── HERO ANIMATION ── */
+  .hero-eyebrow { animation: fadeDown .6s ease .1s both; }
+  h1.hero-name   { animation: fadeDown .6s ease .2s both; }
+  .hero-title    { animation: fadeDown .6s ease .3s both; }
+  .hero-desc     { animation: fadeDown .6s ease .4s both; }
+  .hero-ctas     { animation: fadeDown .6s ease .5s both; }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { gap: 20px; }
+    #hero { grid-template-columns: 1fr; padding: 100px 28px 60px; }
+    .hero-visual { display: none; }
+    section { padding: 72px 28px; }
+    .pub-card { grid-template-columns: 1fr; }
+    .pub-acc { text-align: left; }
+  }
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">SAF.dev</a>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#publications">Research</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-text">
+    <div class="hero-eyebrow">AI Researcher &amp; Engineer</div>
+    <h1 class="hero-name">Shaikh<br><em>Ahmed Fayaz</em></h1>
+    <p class="hero-title">BSc CSE · Daffodil International University · CGPA 3.41</p>
+    <p class="hero-desc">
+      Fresh graduate building deep learning solutions for medical imaging,
+      precision agriculture, and NLP — with 9 research publications at
+      IEEE conferences and international journals.
+    </p>
+    <div class="hero-ctas">
+      <a class="btn-primary" href="#publications">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        View Research
+      </a>
+      <a class="btn-ghost" href="#contact">
+        Get in Touch
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="stat-card">
+      <div class="stat-num">9</div>
+      <div class="stat-label"><strong>Publications</strong>IEEE Conferences &amp; Journals</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">99%</div>
+      <div class="stat-label"><strong>Peak Accuracy</strong>Brain MRI Tumor Classification</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">5.0</div>
+      <div class="stat-label"><strong>GPA</strong>HSC &amp; SSC — Perfect Score</div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-tag">Expertise</div>
+  <h2 class="section-title">Skills &amp; Technologies</h2>
+  <div class="skills-grid">
+    <div class="skill-group fade-up">
+      <span class="skill-group-icon">🧠</span>
+      <div class="skill-group-title">Programming &amp; ML</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">TensorFlow</span>
+        <span class="skill-tag">PyTorch</span>
+        <span class="skill-tag">Scikit-learn</span>
+      </div>
+    </div>
+    <div class="skill-group fade-up">
+      <span class="skill-group-icon">📊</span>
+      <div class="skill-group-title">Data Analytics</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Power BI</span>
+        <span class="skill-tag">Excel</span>
+        <span class="skill-tag">Matplotlib</span>
+        <span class="skill-tag">Seaborn</span>
+      </div>
+    </div>
+    <div class="skill-group fade-up">
+      <span class="skill-group-icon">🗄️</span>
+      <div class="skill-group-title">Databases &amp; Web</div>
+      <div class="skill-tags">
+        <span class="skill-tag">MySQL</span>
+        <span class="skill-tag">HTML</span>
+        <span class="skill-tag">CSS</span>
+        <span class="skill-tag">JavaScript</span>
+      </div>
+    </div>
+    <div class="skill-group fade-up">
+      <span class="skill-group-icon">⚙️</span>
+      <div class="skill-group-title">Tools &amp; DevOps</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Git</span>
+        <span class="skill-tag">GitHub</span>
+        <span class="skill-tag">Android NDK</span>
+        <span class="skill-tag">Kotlin</span>
+      </div>
+    </div>
+    <div class="skill-group fade-up">
+      <span class="skill-group-icon">🔬</span>
+      <div class="skill-group-title">Research Methods</div>
+      <div class="skill-tags">
+        <span class="skill-tag">SHAP</span>
+        <span class="skill-tag">LIME</span>
+        <span class="skill-tag">Grad-CAM</span>
+        <span class="skill-tag">K-Fold CV</span>
+        <span class="skill-tag">Transfer Learning</span>
+      </div>
+    </div>
+    <div class="skill-group fade-up">
+      <span class="skill-group-icon">🏅</span>
+      <div class="skill-group-title">Certifications</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Oracle DB — ICT DIU</span>
+        <span class="skill-tag">Data Analyst Bootcamp</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PUBLICATIONS -->
+<section id="publications">
+  <div class="section-tag">Research</div>
+  <h2 class="section-title">Publications</h2>
+  <div class="pub-list">
+
+    <div class="pub-card">
+      <div>
+        <div class="pub-venue">IEEE Conference</div>
+        <div class="pub-title">HemoNet-B0: A Lightweight Hybrid CNN-Transformer for Blood Cell Classification</div>
+        <div class="pub-desc">Combines EfficientNet-B0 with a compact Vision Transformer for multi-class hematological classification. Incorporates SHAP &amp; LIME for clinical interpretability. Validated with three-fold cross-validation.</div>
+      </div>
+      <div class="pub-acc"><span class="acc-num">98.93%</span><span class="acc-label">Accuracy</span></div>
+    </div>
+
+    <div class="pub-card">
+      <div>
+        <div class="pub-venue">IEEE Conference</div>
+        <div class="pub-title">Merging EfficientNet and DenseNet For Explainable Cotton Disease Classification</div>
+        <div class="pub-desc">HDENet fuses EfficientNetB3 and DenseNet201 with transfer learning and LIME for precision agriculture. Achieved 97.85% training and 96.60% validation accuracy.</div>
+      </div>
+      <div class="pub-acc"><span class="acc-num">97.85%</span><span class="acc-label">Training</span></div>
+    </div>
+
+    <div class="pub-card">
+      <div>
+        <div class="pub-venue">IEEE Conference</div>
+        <div class="pub-title">Brain MRI Tumor Classification (RXVEnsemble)</div>
+        <div class="pub-desc">Ensemble of ResNet50V2, VGG16, and Xception with Random Forest. Grad-CAM verification confirms tumor focus localization.</div>
+      </div>
+      <div class="pub-acc"><span class="acc-num">99.56%</span><span class="acc-label">Accuracy</span></div>
+    </div>
+
+    <div class="pub-card">
+      <div>
+        <div class="pub-venue">IEEE Conference</div>
+        <div class="pub-title">Deep Learning Approaches for Citrus Leaf Disease Classification</div>
+        <div class="pub-desc">Comparative study using CNN models including ResNet50. Addresses precision agriculture image classification with high generalizability.</div>
+      </div>
+      <div class="pub-acc"><span class="acc-num">99.08%</span><span class="acc-label">Validation</span></div>
+    </div>
+
+    <div class="pub-card">
+      <div>
+        <div class="pub-venue">IEEE Conference</div>
+        <div class="pub-title">EndoLite-ViT: A Lightweight Vision Transformer for Gastrointestinal Disease Classification</div>
+        <div class="pub-desc">Lightweight ViT with small patch embeddings for GERD and polyp detection in endoscopic images. SHAP &amp; LIME interpretability with k-fold cross-validation.</div>
+      </div>
+      <div class="pub-acc"><span class="acc-num">95%</span><span class="acc-label">Accuracy</span></div>
+    </div>
+
+    <div class="pub-card">
+      <div>
+        <div class="pub-venue">IEEE Conference</div>
+        <div class="pub-title">E-Net: Optimized Lightweight CNN for Accurate Lung Cancer Classification</div>
+        <div class="pub-desc">CT scan-based lung cancer detection using E-Net with SMOTE and data augmentation for a computer-aided diagnosis system.</div>
+      </div>
+      <div class="pub-acc"><span class="acc-num">99.98%</span><span class="acc-label">Accuracy</span></div>
+    </div>
+
+    <div class="pub-card">
+      <div>
+        <div class="pub-venue review">Journal · Under Review</div>
+        <div class="pub-title">A Two-Stream Hybrid Model for Explainable Colorectal Cancer Tissue Classification</div>
+        <div class="pub-desc">EfficientNet-B0 + ViT-B/16 feature-level fusion with focal loss on Kather-2016 and NCT-CRC-HE-100K datasets. Multi-center generalization validated. — Journal of Pathology Informatics.</div>
+      </div>
+      <div class="pub-acc"><span class="acc-num">99.78%</span><span class="acc-label">External Val.</span></div>
+    </div>
+
+    <div class="pub-card">
+      <div>
+        <div class="pub-venue">IEEE Conference</div>
+        <div class="pub-title">Rank_MRX: Explainable Deep Ensemble for Multi-Stage Diabetic Retinopathy Detection</div>
+        <div class="pub-desc">Ensemble learning framework with SHAP integration for accurate multi-stage grading of diabetic retinopathy from retinal fundus images.</div>
+      </div>
+      <div class="pub-acc"><span class="acc-num">98%</span><span class="acc-label">Accuracy</span></div>
+    </div>
+
+    <div class="pub-card">
+      <div>
+        <div class="pub-venue review">Preprint</div>
+        <div class="pub-title">Heart Attack Risk Detection via Explainable Stacking Ensemble</div>
+        <div class="pub-desc">Feature selection with RF, Chi-Square, ANOVA, PCA and LASSO. Stacking ensemble of XGBoost + Random Forest with SHAP &amp; LIME interpretation. Published on ResearchGate.</div>
+      </div>
+      <div class="pub-acc"><span class="acc-num">96.57%</span><span class="acc-label">5-Fold CV</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-tag">Engineering</div>
+  <h2 class="section-title">Projects</h2>
+  <div class="projects-grid">
+    <div class="project-card fade-up">
+      <div class="project-num">01 / PROJECT</div>
+      <div class="project-title">Student Hub Web Application</div>
+      <div class="project-desc">Full-stack academic platform integrating Google Auth API and Google Drive API for student resource management and collaboration.</div>
+      <div class="project-tags">
+        <span class="project-tag">HTML</span>
+        <span class="project-tag">CSS</span>
+        <span class="project-tag">Bootstrap</span>
+        <span class="project-tag">PHP</span>
+        <span class="project-tag">Google API</span>
+      </div>
+    </div>
+    <div class="project-card fade-up">
+      <div class="project-num">02 / PROJECT</div>
+      <div class="project-title">Casio fx-991ES PLUS Simulator</div>
+      <div class="project-desc">Android app replicating the full Casio scientific calculator with 100-digit arbitrary precision arithmetic via a hybrid C++ backend using JNI and Android NDK.</div>
+      <div class="project-tags">
+        <span class="project-tag">Kotlin</span>
+        <span class="project-tag">C++</span>
+        <span class="project-tag">JNI</span>
+        <span class="project-tag">Android NDK</span>
+      </div>
+    </div>
+    <div class="project-card fade-up">
+      <div class="project-num">03 / RESEARCH</div>
+      <div class="project-title">Remittance Impact Modeling (Bangladesh)</div>
+      <div class="project-desc">Applied RF, DT, NB, KNN, SVR and Gaussian NB to model the macroeconomic impact of remittances on the Bangladeshi economy. Published as a preprint (DOI: 10.1310/RG.2.2.18002.06081).</div>
+      <div class="project-tags">
+        <span class="project-tag">Python</span>
+        <span class="project-tag">Scikit-learn</span>
+        <span class="project-tag">Economics ML</span>
+        <span class="project-tag">ResearchGate</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="section-tag" style="justify-content:center">Let's Connect</div>
+    <h2 class="section-title" style="margin-bottom:16px">Get In Touch</h2>
+    <p class="contact-desc">Open to research collaborations, internship and full-time opportunities in AI/ML engineering and data science.</p>
+    <div class="contact-links">
+      <a class="contact-item" href="mailto:ahmedfayazsefat@gmail.com">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        ahmedfayazsefat@gmail.com
+      </a>
+      <a class="contact-item" href="tel:+8801972820810">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13 19.79 19.79 0 0 1 1.61 4.38 2 2 0 0 1 3.58 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        +880 1972 820810
+      </a>
+      <a class="contact-item" href="https://linkedin.com/in/ahmed-fayaz-sefat" target="_blank">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a class="contact-item" href="https://github.com/ShaikhFayaz" target="_blank">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+    </div>
+    <div style="font-family: var(--mono); font-size:12px; color: var(--text-muted);">
+      📍 Daulatpur, Khulna, Bangladesh
+    </div>
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 Shaikh Ahmed Fayaz &nbsp;·&nbsp; Built with purpose
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-up, .pub-card').forEach(el => observer.observe(el));
+
+  // Stagger pub cards
+  document.querySelectorAll('.pub-card').forEach((card, i) => {
+    card.style.transitionDelay = `${i * 0.07}s`;
+  });
+</script>
+</body>
+</html>
